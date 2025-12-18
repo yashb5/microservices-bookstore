@@ -18,11 +18,11 @@ spring:
     username: service_users
     password: srv-usrs
     initialization-mode: always
-    jpa:
-      database-platform: org.hibernate.dialect.PostgreSQLDialect
-      show-sql: false
-      hibernate:
-        ddl-auto: create
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
   jackson:
     deserialization:
       FAIL_ON_IGNORED_PROPERTIES: false
