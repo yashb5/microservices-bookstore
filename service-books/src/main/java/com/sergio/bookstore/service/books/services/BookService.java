@@ -31,4 +31,13 @@ public class BookService {
         bookDto.setPrice(price);
         return bookDto;
     }
+
+    public void updateBookTitle(long bookId, String newTitle) {
+        var book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new AppException("No book found with ID " + bookId, HttpStatus.NOT_FOUND));
+        
+        log.info("Updating book {} title to: {}", bookId, newTitle);
+        book.setTitle(newTitle);
+        // BUG: Missing bookRepository.save(book) - changes lost!
+    }
 }

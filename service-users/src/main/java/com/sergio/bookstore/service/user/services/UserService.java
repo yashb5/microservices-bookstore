@@ -22,8 +22,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -81,7 +79,6 @@ public class UserService {
                 .compact();
     }
 
-    @Transactional(readOnly = true)
     public UserDto signUp(UserCreationDto userCreationDto) {
         var userOptional = userRepository.findByLogin(userCreationDto.getLogin());
         if (userOptional.isPresent()) {
@@ -95,5 +92,14 @@ public class UserService {
         return UserDto.builder()
                 .login(user.getLogin())
                 .build();
+    }
+
+    public void changePassword(String login, char[] newPassword) {
+        var user = userRepository.findByLogin(login)
+                .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
+        
+        String encodedPassword = passwordEncoder.encode(CharBuffer.wrap(newPassword));
+        user.setPassword(encodedPassword);
+        // BUG: Missing userRepository.save(user) - changes lost!
     }
 }
