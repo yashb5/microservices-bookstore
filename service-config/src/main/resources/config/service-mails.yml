@@ -23,3 +23,14 @@ spring:
         brokers: localhost:9092
   zipkin:
     baseUrl: http://127.0.0.1:9411/
+  mail:
+    host: localhost
+    port: 1025
+    username: ""
+    password: ""
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
