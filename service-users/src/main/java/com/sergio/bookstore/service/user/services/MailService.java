@@ -17,6 +17,7 @@ public class MailService {
     @NewSpan("send-email")
     public void sendUserWelcomeMail(UserDto userDto) {
         log.info("Sending a creation email for {}", userDto.getLogin());
-        kafkaTemplate.send("mails", "user.creation: " + userDto.getLogin());
+        // BUG: Using pipe delimiter but consumer expects colon
+        kafkaTemplate.send("mails", "user.creation|" + userDto.getLogin());
     }
 }

@@ -15,8 +15,16 @@ public class KafkaListenerService {
     public Consumer<KStream<Object, String>> listenMessages() {
         return input -> {
             input.foreach((key, value) -> {
-                var msgParts = value.split(":");
-                log.info("Will perform a {} with content {}", msgParts[0], msgParts[1]);
+                try {
+                    var msgParts = value.split(":");
+                    if (msgParts.length >= 2) {
+                        log.info("Processing {} with content {}", msgParts[0], msgParts[1]);
+                        // Send email logic here...
+                    }
+                    // BUG: Silently ignores messages that don't match expected format
+                } catch (Exception e) {
+                    // BUG: Swallowing exception silently
+                }
             });
         };
     }
