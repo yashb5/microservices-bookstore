@@ -26,7 +26,6 @@ public class BookService {
         BookDto bookDto = bookRepository.findById(bookId)
                 .map(bookMapper::toBookDto)
                 .orElseThrow(() -> new AppException("No book found with ID " + bookId, HttpStatus.NOT_FOUND));
-        log.debug("Fetched book: {}",  bookRepository.findById(bookId));
         BigDecimal price = circuitBreakerFactory.create("getPrice").run(() -> priceService.getPrice(bookId, bookDto),
                 t -> BigDecimal.ZERO);
         bookDto.setPrice(price);
